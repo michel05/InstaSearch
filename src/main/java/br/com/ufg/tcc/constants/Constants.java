@@ -11,6 +11,7 @@ public class Constants {
     public static final String REDIRECT_URI = "http://localhost:8080/tcc/validaToken";
     public static final String TOKEN = "1678850039.1fb234f.bdc0d1c346fe4b7b91d98b3b765add07";
     public static final int TOTAL_POSTS = 100;
+    public final static int MAX_CARACTERES_TITULO = 100;
 
     /**
      * Http Session Attributes

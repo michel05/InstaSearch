@@ -51,17 +51,17 @@ function ativarLoading() {
         </c:if>
 		
 		
-		<c:if test="${ lista ne null }">
+		<c:if test="${ usuariosLista ne null and usuariosLista.size > 0}">
         <div class="login" style="width: 80%">
             <div class="row">
             <div class="col-md-12">
-                <c:forEach var="contato" items="${lista}" varStatus="id">
+                <c:forEach var="contato" items="${usuariosLista}" varStatus="id">
                     
                     <div class="col-md-3" style="padding-bottom: 20px">
                        @${contato.nome} <br>
                         <img style="border-radius: 50%;" alt="" src="${contato.imagem}"><br>
 					Id: ${contato.id}<br> 
-					<a href="buscarInformacoes?id=${contato.id}"><button onclick="ativarLoading();" type="button" class="btn btn-info">Baixar estatisticas</button></a>
+					<a href="info?id=${contato.id}"><button onclick="ativarLoading();" type="button" class="btn btn-info">Baixar estatisticas</button></a>
                     </div>
                  
                 </c:forEach>

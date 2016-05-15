@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import javax.servlet.http.HttpSession;
 
@@ -18,9 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import br.com.ufg.tcc.constants.Constants;
+import br.com.ufg.tcc.model.InformacoesUsuario;
 import br.com.ufg.tcc.model.Post;
 import br.com.ufg.tcc.model.Usuario;
-import br.com.ufg.tcc.utils.Utils;
+import br.com.ufg.tcc.utils.ExcelUtil;
 
 @Repository
 public class InstagramService {
@@ -87,7 +89,10 @@ public class InstagramService {
 		return jsonObj;
 	}
 
-	public void busqueInformacoesUsuario(String id) {
+	public InformacoesUsuario busqueInformacoesUsuario(String id) {
+		
+		List<Post> listaPosts = new ArrayList<Post>();
+		InformacoesUsuario infoUser = new InformacoesUsuario();
 		
 		try {
 			
@@ -96,8 +101,6 @@ public class InstagramService {
 			
 			JSONObject jObj = new JSONObject(response.toString());
 			JSONArray medias = busqueArrayObjetoJson(jObj, "data");
-			
-			List<Post> lista = new ArrayList<Post>();
 			
 			String nome = "";
 			
@@ -147,19 +150,20 @@ public class InstagramService {
 				
 				post.setLink(postagem.getString("link"));
 				
-				lista.add(post);
+				listaPosts.add(post);
 				
 				if (i == 0){
+					Random rd = new Random();
+					int num = rd.nextInt(1000);
 					nome = busqueObjetoJson(postagem, "user").getString("username");
 					post.setNome(nome);
+					infoUser.setNome(nome.concat(String.valueOf(num)));
 				}
 			}
 			
-			System.out.println("Lista: " + lista.size());
+			infoUser.setListaPosts(listaPosts);
 			
-			Utils.gerarExcelInstagram(lista, nome);
-			
-			session.setAttribute("sucesso", "posts_" + nome + ".xls");
+			System.out.println("Lista: " + listaPosts.size());
 			
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -167,6 +171,7 @@ public class InstagramService {
 			
 		}
 		
+		return infoUser;
 	}
 	
 	private String getResponse(String url) throws Exception {

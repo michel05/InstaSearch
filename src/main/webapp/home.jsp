@@ -51,7 +51,7 @@ function ativarLoading() {
         </c:if>
 		
 		
-		<c:if test="${ usuariosLista ne null and usuariosLista.size > 0}">
+		<c:if test="${ usuariosLista ne null}">
         <div class="login" style="width: 80%">
             <div class="row">
             <div class="col-md-12">

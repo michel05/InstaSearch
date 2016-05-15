@@ -1,25 +1,28 @@
 package br.com.ufg.tcc.utils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
+import br.com.ufg.tcc.constants.Constants;
+import br.com.ufg.tcc.model.InformacoesUsuario;
 import br.com.ufg.tcc.model.Post;
 
-public class Utils {
+public class ExcelUtil {
 
 	
-	public static void gerarExcelInstagram(List<Post> lista, String nome) {
+	public static void gerarExcelInstagram(InformacoesUsuario infoUser) {
 		
+		FileOutputStream file = null;
 		HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheetAlunos = workbook.createSheet("Posts");
         String months[] = {"Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"};
@@ -38,7 +41,7 @@ public class Utils {
         row1.createCell(8).setCellValue("Link");
         
         
-        for (Post post : lista) {
+        for (Post post : infoUser.getListaPosts()) {
             Row row = sheetAlunos.createRow(rownum++);
             int cellnum = 0;
             
@@ -74,11 +77,10 @@ public class Utils {
          
         try {
         	
-            FileOutputStream out = 
-                    new FileOutputStream("F:\\arquivos_coleta\\posts_" + nome + ".xls");
-            workbook.write(out);
-            out.close();
+        	file = new FileOutputStream(crieArquivo(Constants.LOCAL_ARQUIVO + infoUser.getNome() + ".xls"));
+            workbook.write(file);
             System.out.println("Arquivo Excel criado com sucesso!");
+            file.close();
              
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -86,8 +88,37 @@ public class Utils {
         } catch (IOException e) {
             e.printStackTrace();
                System.out.println("Erro na edição do arquivo!");
-        }
-
+        } 
+	}
+	
+	
+	private static File crieArquivo(String arquivo) {
 		
+		File file = new File(arquivo);
+		if (file.exists()) {
+			file.delete();
+			return new File(arquivo); 
+		}
+		
+		return file;
+	}
+	
+	public static byte[] fileToArrayByte(File arq) {
+		
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		
+		try {
+			FileInputStream in = new FileInputStream(arq);
+			int b;
+			while((b = in.read())>-1){
+			   out.write(b);
+			}
+			out.close();
+			in.close();
+		} catch (Exception e) {
+			e.getMessage();
+		}
+		
+		return out.toByteArray();
 	}
 }

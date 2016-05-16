@@ -1,5 +1,7 @@
 package br.com.ufg.tcc.constants;
 
+import java.io.File;
+
 public class Constants {
 
 	
@@ -12,7 +14,11 @@ public class Constants {
     public static final String TOKEN = "1678850039.1fb234f.bdc0d1c346fe4b7b91d98b3b765add07";
     public static final int TOTAL_POSTS = 100;
     public final static int MAX_CARACTERES_TITULO = 100;
-    public static final String LOCAL_ARQUIVO= "./arquivos/";
+//    public static final String LOCAL_ARQUIVO= System.getProperty("user.dir") + "\\src\\main\\webapp\\arquivos\\";
+    public static final String LOCAL_ARQUIVO = new File(".").getAbsolutePath() + "\\src\\main\\webapp\\resources\\arquivos\\";
+    public static final String CONTEXTO_PROD = "\\instaSearch\\resources\\arquivos\\";
+    public static final String CONTEXTO = "\\instaSearch\\resources\\arquivos\\";
+
 
     /**
      * Http Session Attributes

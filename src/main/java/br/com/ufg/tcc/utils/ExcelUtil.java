@@ -3,9 +3,7 @@ package br.com.ufg.tcc.utils;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Calendar;
 
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -20,12 +18,13 @@ import br.com.ufg.tcc.model.Post;
 public class ExcelUtil {
 
 	
-	public static void gerarExcelInstagram(InformacoesUsuario infoUser) {
+	public static String gerarExcelInstagram(InformacoesUsuario infoUser) throws Exception {
 		
 		FileOutputStream file = null;
 		HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheetAlunos = workbook.createSheet("Posts");
         String months[] = {"Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"};
+        File arquivo = crieArquivo(Constants.LOCAL_ARQUIVO + infoUser.getNome() + ".xls");
         
         int rownum = 0;
         
@@ -77,18 +76,17 @@ public class ExcelUtil {
          
         try {
         	
-        	file = new FileOutputStream(crieArquivo(Constants.LOCAL_ARQUIVO + infoUser.getNome() + ".xls"));
+        	file = new FileOutputStream(arquivo);
             workbook.write(file);
             System.out.println("Arquivo Excel criado com sucesso!");
             file.close();
              
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-               System.out.println("Arquivo não encontrado!");
-        } catch (IOException e) {
-            e.printStackTrace();
-               System.out.println("Erro na edição do arquivo!");
+        } catch (Exception e) {
+        	System.out.println(e.getMessage());
+        	throw new Exception();
         } 
+        
+        return arquivo.getAbsolutePath();
 	}
 	
 	

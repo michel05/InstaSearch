@@ -1,6 +1,12 @@
 package br.com.ufg.tcc;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Workbook;
 
 /**
  * Unit test for simple App.
@@ -10,7 +16,11 @@ public class AppTest
 	final static String token = "1678850039.1fb234f.bdc0d1c346fe4b7b91d98b3b765add07 ";
 	
 	public static void main(String[] args) throws Exception {
-		testeArquivo();
+		teste();
+	}
+	
+	private static void teste() {
+		System.out.println(new File(".").getAbsolutePath());
 	}
 	
 	private static void testeArquivo() {
@@ -20,10 +30,19 @@ public class AppTest
 		if(file.exists()) {
 			file.delete();
 		}
-		
-		
 	}
-	
+
+	private static void pegueUrl() throws Exception {
+		File file = new File(System.getProperty("user.dir") + "\\arquivos-teste\\teste.xls");
+		
+		FileOutputStream os = new FileOutputStream(file);
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		workbook.createSheet("teste");
+		workbook.write(os);
+		os.close();
+		
+		System.out.println(System.getProperty("user.dir"));
+	}
 	
 //	private static void sendGet() throws Exception {
 //

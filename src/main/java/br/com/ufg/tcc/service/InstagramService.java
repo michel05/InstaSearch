@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import br.com.ufg.tcc.constants.Constants;
+import br.com.ufg.tcc.model.FiltroPost;
 import br.com.ufg.tcc.model.InformacoesUsuario;
 import br.com.ufg.tcc.model.Post;
 import br.com.ufg.tcc.model.Usuario;
@@ -89,14 +90,14 @@ public class InstagramService {
 		return jsonObj;
 	}
 
-	public InformacoesUsuario busqueInformacoesUsuario(String id) {
+	public InformacoesUsuario busqueInformacoesUsuario(FiltroPost filtro) {
 		
 		List<Post> listaPosts = new ArrayList<Post>();
 		InformacoesUsuario infoUser = new InformacoesUsuario();
 		
 		try {
 			
-			String url = "https://api.instagram.com/v1/users/" + id + "/media/recent?count=5&access_token=" + Constants.TOKEN;
+			String url = "https://api.instagram.com/v1/users/" + filtro.getIdUsuario() + "/media/recent?access_token=" + Constants.TOKEN + filtro.monteSufixoUrl();
 			String response = getResponse(url);
 			
 			JSONObject jObj = new JSONObject(response.toString());
@@ -106,7 +107,7 @@ public class InstagramService {
 			
 			System.out.println(" Medias: " + medias.length());
 			
-			for (int i=0; i < medias.length() && i < Constants.TOTAL_POSTS; i++) {
+			for (int i=0; i < medias.length(); i++) {
 				
 				Post post = new Post();
 				JSONObject postagem =  busqueObjetoJsonDeUmArray(medias, i);
@@ -129,11 +130,9 @@ public class InstagramService {
 				JSONObject cabecalho = busqueObjetoJson(postagem, "caption");
 				
 				if (cabecalho != null) {
-					post.setDescricao(cabecalho.getString("text")
-							.substring(0, 
-									(cabecalho.getString("text").length() > Constants.MAX_CARACTERES_TITULO) 
-										? Constants.MAX_CARACTERES_TITULO 
-												: cabecalho.getString("text").length()));
+					post.setDescricao(cabecalho.getString("text").substring(0,
+							(cabecalho.getString("text").length() > Constants.MAX_CARACTERES_TITULO)
+									? Constants.MAX_CARACTERES_TITULO : cabecalho.getString("text").length()));
 					post.setNumCaracteres(cabecalho.getString("text").length());
 					post.setNumHashtags(StringUtils.countMatches(cabecalho.getString("text"), "#"));
 					
@@ -153,11 +152,10 @@ public class InstagramService {
 				listaPosts.add(post);
 				
 				if (i == 0){
-					Random rd = new Random();
-					int num = rd.nextInt(1000);
 					nome = busqueObjetoJson(postagem, "user").getString("username");
 					post.setNome(nome);
-					infoUser.setNome(nome.concat(String.valueOf(num)));
+					infoUser.setNome(nome);
+					infoUser.setLocalArquivo(Constants.CONTEXTO + infoUser.getNome() + ".xls");
 				}
 			}
 			

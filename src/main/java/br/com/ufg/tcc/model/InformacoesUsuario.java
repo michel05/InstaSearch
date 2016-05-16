@@ -8,6 +8,7 @@ public class InformacoesUsuario {
 	private List<Post> listaPosts;
 	private Usuario usuario;
 	private String nome;
+	private String localArquivo;
 	
 	public InformacoesUsuario() {
 		listaPosts = new ArrayList<Post>();
@@ -32,5 +33,15 @@ public class InformacoesUsuario {
 	}
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+
+	public String getLocalArquivo() {
+		return localArquivo;
+	}
+
+
+	public void setLocalArquivo(String localArquivo) {
+		this.localArquivo = localArquivo;
 	}
 }

@@ -4,8 +4,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -17,6 +19,7 @@ import br.com.ufg.tcc.model.Post;
 
 public class ExcelUtil {
 
+	private static final Logger logger = Logger.getLogger(ExcelUtil.class);
 	
 	public static String gerarExcelInstagram(InformacoesUsuario infoUser) throws Exception {
 		
@@ -25,6 +28,9 @@ public class ExcelUtil {
         HSSFSheet sheetAlunos = workbook.createSheet("Posts");
         String months[] = {"Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"};
         File arquivo = crieArquivo(Constants.LOCAL_ARQUIVO + infoUser.getNome() + ".xls");
+        SimpleDateFormat sdfHoras = new SimpleDateFormat("HH:mm:ss");
+        
+        logger.info("Diretorio do arquivo: " + arquivo);
         
         int rownum = 0;
         
@@ -33,11 +39,13 @@ public class ExcelUtil {
         row1.createCell(1).setCellValue("Descricao");
         row1.createCell(2).setCellValue("Curtidas");
         row1.createCell(3).setCellValue("Boca a boca");
-        row1.createCell(4).setCellValue("N Comentarios");
-        row1.createCell(5).setCellValue("Mes");
-        row1.createCell(6).setCellValue("Nº Caracteres");
-        row1.createCell(7).setCellValue("Nº HashTags");
-        row1.createCell(8).setCellValue("Link");
+        row1.createCell(4).setCellValue("Likes de menções");
+        row1.createCell(5).setCellValue("N Comentarios");
+        row1.createCell(6).setCellValue("Data");
+        row1.createCell(7).setCellValue("Hora");
+        row1.createCell(8).setCellValue("Nº Caracteres");
+        row1.createCell(9).setCellValue("Nº HashTags");
+        row1.createCell(10).setCellValue("Link");
         
         
         for (Post post : infoUser.getListaPosts()) {
@@ -56,13 +64,19 @@ public class ExcelUtil {
             Cell cellMarcacoes = row.createCell(cellnum++);
             cellMarcacoes.setCellValue(post.getNumMarcacoes());
             
+            Cell cellLiskesdeMarcacoes = row.createCell(cellnum++);
+            cellLiskesdeMarcacoes.setCellValue(post.getNumLikesDeMencoes());
+            
             Cell cellComentarios = row.createCell(cellnum++);
             cellComentarios.setCellValue(post.getNumComentarios());
             
             Cell cellData = row.createCell(cellnum++);
             Calendar cal = Calendar.getInstance();
     		cal.setTime(post.getData());
-            cellData.setCellValue(months[post.getData().getMonth()] + "/" + cal.get(Calendar.YEAR));
+            cellData.setCellValue(cal.get(Calendar.DAY_OF_MONTH) + "/" + months[post.getData().getMonth()] + "/" + cal.get(Calendar.YEAR));
+            
+            Cell cellHora = row.createCell(cellnum++);
+            cellHora.setCellValue(sdfHoras.format(cal.getTime()));
             
             Cell cellCaracteres = row.createCell(cellnum++);
             cellCaracteres.setCellValue(post.getNumCaracteres());
@@ -73,16 +87,20 @@ public class ExcelUtil {
             Cell cellLink =row.createCell(cellnum++);
             cellLink.setCellValue(post.getLink());
         }
+        
+        Row row = sheetAlunos.createRow(rownum + 5);
+        Cell cellInfo = row.createCell(0);
+        cellInfo.setCellValue("* Todos dados coletados têm como referência a quantidade máxima de 150 comentários, devido a limitação do Instagram.");
          
         try {
         	
         	file = new FileOutputStream(arquivo);
             workbook.write(file);
-            System.out.println("Arquivo Excel criado com sucesso!");
+            logger.info("Arquivo Excel criado com sucesso!");
             file.close();
              
         } catch (Exception e) {
-        	System.out.println(e.getMessage());
+        	logger.error(e.getMessage());
         	throw new Exception();
         } 
         
@@ -114,7 +132,7 @@ public class ExcelUtil {
 			out.close();
 			in.close();
 		} catch (Exception e) {
-			e.getMessage();
+			logger.error(e.getMessage());
 		}
 		
 		return out.toByteArray();

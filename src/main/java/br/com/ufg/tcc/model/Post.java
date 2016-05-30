@@ -1,6 +1,8 @@
 package br.com.ufg.tcc.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Post {
 
@@ -16,6 +18,16 @@ public class Post {
 	private int numCaracteres;
 	private int numHashtags;
 	private String link;
+	private List<String> listaNomesMencao;
+	private int numLikesDeMencoes;
+	
+	public Post() {
+		listaNomesMencao = new ArrayList<String>();
+	}
+	
+	public void adicioneLikeDeMencao() {
+		this.numLikesDeMencoes++;
+	}
 	
 	public int getNumCurtidas() {
 		return numCurtidas;
@@ -91,5 +103,17 @@ public class Post {
 	}
 	public void setLink(String link) {
 		this.link = link;
+	}
+	public List<String> getListaNomesMencao() {
+		return listaNomesMencao;
+	}
+	public void setListaNomesMencao(List<String> listaNomesMencao) {
+		this.listaNomesMencao = listaNomesMencao;
+	}
+	public int getNumLikesDeMencoes() {
+		return numLikesDeMencoes;
+	}
+	public void setNumLikesDeMencoes(int numLikesDeMencoes) {
+		this.numLikesDeMencoes = numLikesDeMencoes;
 	}
 }

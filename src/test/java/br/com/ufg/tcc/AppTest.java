@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -16,7 +18,16 @@ public class AppTest
 	final static String token = "1678850039.1fb234f.bdc0d1c346fe4b7b91d98b3b765add07 ";
 	
 	public static void main(String[] args) throws Exception {
-		teste();
+		testeData();
+	}
+	
+	private static void testeData() {
+		
+		Date data = new Date();
+		
+		Calendar cal = Calendar.getInstance();
+		
+		System.out.println(cal.HOUR_OF_DAY);
 	}
 	
 	private static void teste() {

@@ -1,5 +1,6 @@
 package br.com.ufg.tcc.model;
 
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -9,16 +10,12 @@ public class FiltroPost {
 
 	private String idUsuario;
 	private int numPosts;
-	private Date dataInicio;
+	private String dataInicio;
+	private String dataFim;
+	private int numPostsFaltantes;
 	
 	public FiltroPost() {
 		// TODO Auto-generated constructor stub
-	}
-	
-	public FiltroPost(String idUsuario, int numPosts, String dataInicio) {
-		this.idUsuario = idUsuario;
-		this.numPosts = numPosts;
-		this.dataInicio = Util.stringToDate(dataInicio, "yyyy-MM");
 	}
 	
 	public String getIdUsuario() {
@@ -33,10 +30,10 @@ public class FiltroPost {
 	public void setNumPosts(int numPosts) {
 		this.numPosts = numPosts;
 	}
-	public Date getDataInicio() {
+	public String getDataInicio() {
 		return dataInicio;
 	}
-	public void setDataInicio(Date dataInicio) {
+	public void setDataInicio(String dataInicio) {
 		this.dataInicio = dataInicio;
 	}
 	
@@ -44,16 +41,47 @@ public class FiltroPost {
 		
 		Calendar calendar = Calendar.getInstance();
 		StringBuilder sb = new StringBuilder("");
+		Timestamp tstamp;
+		Date data = new Date();
 		
-		if (this.getDataInicio() != null) {
-			calendar.setTime(this.getDataInicio());
-			sb.append("&min_timestamp=" + calendar.getTimeInMillis());
+		if (dataInicio != null && !dataInicio.equals("")) {
+			
+			data = Util.stringToDate(dataInicio, "yyyy-MM-dd");
+			calendar.setTime(data);
+			tstamp = new Timestamp(calendar.getTime().getTime());
+			sb.append("&min_timestamp=" + (tstamp.getTime()/1000));
 		}
-		if (this.getNumPosts() > 0) {
-			sb.append("&count=" + this.getNumPosts());
+		
+		if (dataFim != null && !dataFim.equals("")) {
+			
+			data = Util.stringToDate(dataFim, "yyyy-MM-dd");
+			calendar.setTime(data);
+			tstamp = new Timestamp(calendar.getTime().getTime());
+			sb.append("&max_timestamp=" + (tstamp.getTime()/1000));
 		}
+		
+		if (this.getNumPostsFaltantes() > 0) {
+			sb.append("&count=" + this.getNumPostsFaltantes());
+		}
+		
 		
 		return sb.toString();
+	}
+
+	public String getDataFim() {
+		return dataFim;
+	}
+
+	public void setDataFim(String dataFim) {
+		this.dataFim = dataFim;
+	}
+
+	public int getNumPostsFaltantes() {
+		return numPostsFaltantes;
+	}
+
+	public void setNumPostsFaltantes(int numPostsFaltantes) {
+		this.numPostsFaltantes = numPostsFaltantes;
 	}
 	
 	

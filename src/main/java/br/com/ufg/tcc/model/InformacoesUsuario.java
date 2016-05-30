@@ -19,9 +19,11 @@ public class InformacoesUsuario {
 	public List<Post> getListaPosts() {
 		return listaPosts;
 	}
-	public void setListaPosts(List<Post> listaPosts) {
-		this.listaPosts = listaPosts;
+	
+	public void adicioneListaPosts(Post post) {
+		this.listaPosts.add(post);
 	}
+	
 	public Usuario getUsuario() {
 		return usuario;
 	}

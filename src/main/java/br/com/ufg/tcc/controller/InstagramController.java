@@ -1,30 +1,20 @@
 package br.com.ufg.tcc.controller;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.FileCopyUtils;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import br.com.ufg.tcc.constants.Constants;
 import br.com.ufg.tcc.model.FiltroPost;
 import br.com.ufg.tcc.model.InformacoesUsuario;
 import br.com.ufg.tcc.model.Usuario;
@@ -39,6 +29,7 @@ public class InstagramController {
 	private HttpServletResponse response;
 	protected String urlArquivo;
 	protected String arquivoNome = "";
+	private static final Logger logger =  Logger.getLogger(InstagramController.class);
 	
 	
 	@Autowired
@@ -58,17 +49,17 @@ public class InstagramController {
 		return "home";
 	}
 	
-	@RequestMapping(value = "/info")
-	public @ResponseBody String busqueInformacoes(@RequestParam String idUsuario,
-													@RequestParam String dataInicio,
-													@RequestParam int numPosts,
-													Model model) throws Exception {
-		
-		FiltroPost filtroPost = new FiltroPost(idUsuario, numPosts, dataInicio);
+	@RequestMapping(value = "/info",  method = RequestMethod.POST)
+	public @ResponseBody String busqueInformacoes(@RequestBody FiltroPost filtroPost, Model model) throws Exception {
 		
 		InformacoesUsuario infoUser = instagramServ.busqueInformacoesUsuario(filtroPost);
 		
+		if (infoUser.getListaPosts().isEmpty()) {
+			return "";
+		}
+		
 		try {
+			
 			urlArquivo = ExcelUtil.gerarExcelInstagram(infoUser);
 		} catch (Exception e) {
 			model.addAttribute("error", "Houve um erro ao gerar o arquivo");

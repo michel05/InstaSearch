@@ -1,0 +1,4 @@
+br\com\mongoDB\IRepository.class
+br\com\mongoDB\PostagemRepository.class
+br\com\mongoDB\MongoDBConection.class
+br\com\mongoDB\MonitoramentoRepository.class

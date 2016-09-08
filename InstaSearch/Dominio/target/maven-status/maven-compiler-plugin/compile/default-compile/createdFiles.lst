@@ -1,0 +1,14 @@
+br\com\tcc\Dominio\HistoricoDePostagem.class
+br\com\tcc\Utils\GeradorDeCodigoAutomatico.class
+br\com\tcc\VO\HistoricoDePostagemVO.class
+br\com\tcc\Dominio\Monitoramento.class
+br\com\tcc\Dominio\Postagem.class
+br\com\tcc\Dominio\UsuarioInstagram.class
+br\com\tcc\VO\UsuarioInstagramVO.class
+br\com\tcc\VO\MonitoramentoVO.class
+br\com\tcc\VO\PostagemVO.class
+br\com\tcc\Constantes\Constantes.class
+br\com\tcc\Interfaces\IDominioPersistente.class
+br\com\tcc\Enums\StatusEnum.class
+br\com\tcc\Relatorio\MonitoramentoRelatorio.class
+br\com\tcc\Utils\RequisicaoUtil.class

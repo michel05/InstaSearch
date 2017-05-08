@@ -10,7 +10,8 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 
 import com.google.gson.Gson;
 
-import br.com.mongoDB.MonitoramentoRepository;
+import br.com.jpa.contratos.BaseDao;
+import br.com.jpa.dao.MonitoramentoDAO;
 import br.com.tcc.Dominio.Monitoramento;
 import br.com.tcc.Enums.StatusEnum;
 import br.com.tcc.Relatorio.MonitoramentoRelatorio;
@@ -21,14 +22,14 @@ import br.com.tcc.VO.MonitoramentoVO;
 @Path("/monitoramento")
 public class ServicoDeMonitoramento {
 
-	private static MonitoramentoRepository repositorio;
+	private static BaseDao<MonitoramentoVO, Integer> repositorio;
 	private static MonitoramentoThread monitoramentoThread = null;
 	
 	@GET
 	@Path("/exportarMonitoramento/{id}")
 	@Produces("application/vnd.ms-excel")
-	public Response downloadMonitoramento(@PathParam("id") String id) {
-		MonitoramentoVO monitoramento = repositorio().buscarPorId(id);
+	public Response downloadMonitoramento(@PathParam("id") int id) {
+		MonitoramentoVO monitoramento = repositorio().findById(id);
 		
 		try {
 			MonitoramentoRelatorio mRelatorio = new MonitoramentoRelatorio(monitoramento);
@@ -44,15 +45,14 @@ public class ServicoDeMonitoramento {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON) 
 	public String busqueMonitoramentos() { 
-		
-		return new Gson().toJson(repositorio().listarTodos());
+		return new Gson().toJson(repositorio().getLista());
 	}
 	
 	@Path("{id}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON) 
-	public String busqueMonitoramentoPorId(@PathParam("id") String id) {
-		return new Gson().toJson(repositorio().buscarPorId(id));
+	public String busqueMonitoramentoPorId(@PathParam("id") int id) {
+		return new Gson().toJson(repositorio().findById(id));
 	}
 	
 	@Path("/iniciar/{titulo}")
@@ -99,8 +99,8 @@ public class ServicoDeMonitoramento {
 		return new Gson().toJson(monitoramentoAtual);
 	}
 	
-	private MonitoramentoRepository repositorio() {
-		return repositorio != null ? repositorio : new MonitoramentoRepository();
+	private BaseDao<MonitoramentoVO, Integer> repositorio() {
+		return repositorio != null ? repositorio : new MonitoramentoDAO();
 	}
 	
 }

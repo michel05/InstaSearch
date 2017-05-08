@@ -1,4 +1,13 @@
-F:\Estudos\workspace\InstaSearch\Repositorio\src\main\java\br\com\mongoDB\MongoDBConection.java
-F:\Estudos\workspace\InstaSearch\Repositorio\src\main\java\br\com\mongoDB\PostagemRepository.java
-F:\Estudos\workspace\InstaSearch\Repositorio\src\main\java\br\com\mongoDB\MonitoramentoRepository.java
-F:\Estudos\workspace\InstaSearch\Repositorio\src\main\java\br\com\mongoDB\IRepository.java
+D:\Michel\Estudos\workspace\InstaSearch\Repositorio\src\main\java\br\com\jpa\fabrica\DaoFactory.java
+D:\Michel\Estudos\workspace\InstaSearch\Repositorio\src\main\java\br\com\jpa\dao\LabelAnaliseImageDAO.java
+D:\Michel\Estudos\workspace\InstaSearch\Repositorio\src\main\java\br\com\mongoDB\PostagemRepository.java
+D:\Michel\Estudos\workspace\InstaSearch\Repositorio\src\main\java\br\com\mongoDB\MongoDBConection.java
+D:\Michel\Estudos\workspace\InstaSearch\Repositorio\src\main\java\br\com\mongoDB\MonitoramentoRepository.java
+D:\Michel\Estudos\workspace\InstaSearch\Repositorio\src\main\java\br\com\jpa\dao\CategoriaDeImagemDAO.java
+D:\Michel\Estudos\workspace\InstaSearch\Repositorio\src\main\java\br\com\jpa\dao\OCRAnaliseImageDAO.java
+D:\Michel\Estudos\workspace\InstaSearch\Repositorio\src\main\java\br\com\jpa\contratos\BaseDao.java
+D:\Michel\Estudos\workspace\InstaSearch\Repositorio\src\main\java\br\com\jpa\dao\FeatureImagemDAO.java
+D:\Michel\Estudos\workspace\InstaSearch\Repositorio\src\main\java\br\com\jpa\dao\PostagemDAO.java
+D:\Michel\Estudos\workspace\InstaSearch\Repositorio\src\main\java\br\com\jpa\dao\MonitoramentoDAO.java
+D:\Michel\Estudos\workspace\InstaSearch\Repositorio\src\main\java\br\com\jpa\dao\FeatureDAO.java
+D:\Michel\Estudos\workspace\InstaSearch\Repositorio\src\main\java\br\com\interfaces\IRepository.java

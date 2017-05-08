@@ -2,21 +2,53 @@ package br.com.tcc.VO;
 
 import java.util.Calendar;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import br.com.tcc.Interfaces.IDominioPersistente;
 
 @XmlRootElement(name = "historicoPostagem")
-public class HistoricoDePostagemVO implements IDominioPersistente{
+@Entity
+@Table(name="historico_postagem")
+public class HistoricoDePostagemVO implements IDominioPersistente<String>{
 	
+	private static final long serialVersionUID = -2319495054564625636L;
+
+	@Id
+	@Basic(optional = false)
+    @Column(name = "id",unique=true, nullable = false)
 	private String id;
+	
+	@Column(name = "data_inicial")
 	private Calendar dataInicial;
+	
+	@Column(name = "data_final")
 	private Calendar dataFinal;
+	
+	@Column(name = "num_curtidas")
 	private int numCurtidas;
+	
+	@Column(name = "num_comentarios")
 	private int numComentarios;
+	
+	@Column(name = "num_curtidas_parcial")
 	private int numCurtidasParcial;
+	
+	@Column(name = "num_comentarios_parcial")
 	private int numComentariosParcial;
 	
+	@ManyToOne
+	@JoinColumns({
+		  @JoinColumn(name = "idPostagem", insertable = false, updatable = false),
+		  @JoinColumn(name = "idHistoricoPostagem", insertable = false, updatable = false)
+		})
 	private PostagemVO postagem;
 
 	public HistoricoDePostagemVO() {

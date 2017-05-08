@@ -14,7 +14,7 @@ import br.com.interfaces.IRepository;
 import br.com.tcc.VO.MonitoramentoVO;
 
 
-public class MonitoramentoRepository implements IRepository<MonitoramentoVO, String>{
+public class MonitoramentoRepository implements IRepository<MonitoramentoVO, Integer>{
 
 	private MongoDBConection conexao;
 	private final String COLECAO = "Monitoramento";
@@ -25,7 +25,7 @@ public class MonitoramentoRepository implements IRepository<MonitoramentoVO, Str
 	}
 	
 	public void salvar(MonitoramentoVO dominio) {
-		dominio.setId(String.valueOf(getNextSequence()).replace(".0", ""));
+		dominio.setId(Integer.parseInt(String.valueOf(getNextSequence()).replace(".0", "")));
 		DBObject dbObject = (DBObject)JSON.parse(new Gson().toJson(dominio));
 		getTabela().insert(dbObject);
 		
@@ -41,7 +41,16 @@ public class MonitoramentoRepository implements IRepository<MonitoramentoVO, Str
 		return listaPostagem;
 	}
 
-	public MonitoramentoVO buscarPorId(String id) {
+	public MonitoramentoVO buscarPorIdInstagram(String id) {
+		DBObject searchQuery = new BasicDBObject().append("idInstagram", id);
+		DBCursor cursor = getTabela().find(searchQuery);
+		while(cursor.hasNext()) {
+			return (new Gson()).fromJson(cursor.next().toString(),MonitoramentoVO.class);
+		}
+		return null;
+	}
+	
+	public MonitoramentoVO buscarPorId(Integer id) {
 		DBObject searchQuery = new BasicDBObject().append("id", id);
 		DBCursor cursor = getTabela().find(searchQuery);
 		while(cursor.hasNext()) {

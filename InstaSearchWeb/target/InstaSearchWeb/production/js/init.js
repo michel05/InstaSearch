@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	caminho_padrao = "http://52.10.61.126:8080";
-	caminho_padrao = "htCtp://localhost:8080";
+//	caminho_padrao = "http://localhost:8080";
 	moment.locale("pt-br");
 	inicio();
 

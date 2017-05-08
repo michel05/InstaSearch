@@ -40,14 +40,14 @@ public class Monitoramento {
 				PostagemVO post = new PostagemVO();
 				
 				JSONObject postagem =  RequisicaoUtil.busqueObjetoJsonDeUmArray(medias, i);
-				post.setId(postagem.getString("id"));
+				post.setIdInstagram(postagem.getString("id"));
 				
 				if(!vo.getPostagens().contains(post)) {
 					vo.getPostagens().add(post);
 					post.setDataInicioMonitoramento(Calendar.getInstance());
 					verifiqueQuantidadePostsAtivos();
 				} else {
-					post = busquePostPorId(post.getId());
+					post = busquePostPorId(post.getIdInstagram());
 				}
 				
 				Postagem dPostagem = new Postagem();
@@ -64,7 +64,7 @@ public class Monitoramento {
 	private PostagemVO busquePostPorId(String id) {
 		
 		for (PostagemVO post : vo.getPostagens()) {
-			if(post.getId().equals(id)) {
+			if(post.getIdInstagram().equals(id)) {
 				return post;
 			}
 		}

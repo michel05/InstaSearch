@@ -7,9 +7,9 @@
   </parent>
   <artifactId>Servico</artifactId>
   <packaging>war</packaging>
-  <name>Servico</name>
   
-  <build>
+  
+  	<build>
 	    <plugins>
 	        <plugin>
 	            <artifactId>maven-war-plugin</artifactId>

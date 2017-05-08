@@ -5,8 +5,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import br.com.tcc.Interfaces.IDominioPersistente;
 
 @XmlRootElement(name = "usuario_instagram")
-public class UsuarioInstagramVO implements IDominioPersistente {
+public class UsuarioInstagramVO implements IDominioPersistente<String> {
 
+	private static final long serialVersionUID = 4374802465050907192L;
 	private String id;
 	private String username;
 	private String bio;

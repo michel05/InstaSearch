@@ -1,6 +1,8 @@
 package br.com.tcc.Interfaces;
 
-public interface IDominioPersistente {
+import java.io.Serializable;
 
-	String getId();
+public interface IDominioPersistente<PK> extends Serializable {
+
+	PK getId();
 }

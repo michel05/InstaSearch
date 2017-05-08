@@ -2,21 +2,21 @@ package br.com.tcc.Threads;
 
 import java.util.Calendar;
 
-import br.com.mongoDB.MonitoramentoRepository;
-import br.com.mongoDB.PostagemRepository;
+import br.com.jpa.dao.MonitoramentoDAO;
+import br.com.jpa.dao.PostagemDAO;
 import br.com.tcc.Dominio.Monitoramento;
 import br.com.tcc.Enums.StatusEnum;
 
 public class MonitoramentoThread extends Thread {
 	
 	private Monitoramento monitoramento;
-	private MonitoramentoRepository repositorio;
-	private PostagemRepository repoPostagem;
+	private MonitoramentoDAO repositorio;
+	private PostagemDAO repoPostagem;
 	
 	public MonitoramentoThread(Monitoramento monitoramento) {
 		this.monitoramento = monitoramento;
-		repositorio = new MonitoramentoRepository();
-		repoPostagem = new PostagemRepository();
+		repositorio = new MonitoramentoDAO();
+		repoPostagem = new PostagemDAO();
 	}
 	
 	public void run() {
@@ -24,8 +24,14 @@ public class MonitoramentoThread extends Thread {
 		try {
 			
 			monitoramento.realizaMonitoramento();
-			repositorio.salvar(monitoramento.getVO());
-			monitoramento.getVO().getPostagens().forEach(x -> repoPostagem.salvar(x));
+			repositorio.inserir(monitoramento.getVO());
+//			monitoramento.getVO().getPostagens().forEach(x -> {
+//				try {
+//					repoPostagem.atualizar(x);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			});
 			Thread.sleep(60 * 1000);
 			
 			while(!verifiqueSePassouTresHoras()) {
@@ -42,6 +48,7 @@ public class MonitoramentoThread extends Thread {
 			this.interrupt();
 			
 		} catch (Exception e) {
+			e.printStackTrace();
 			e.getMessage();
 		}
 	}

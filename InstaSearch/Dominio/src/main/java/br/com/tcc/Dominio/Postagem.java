@@ -1,5 +1,6 @@
 package br.com.tcc.Dominio;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -16,6 +17,7 @@ public class Postagem{
 	
 	public Postagem() {
 		vo = new PostagemVO();
+		vo.setHistorico(new ArrayList<HistoricoDePostagemVO>());
 	}
 
 	public PostagemVO getVo() {
@@ -24,6 +26,9 @@ public class Postagem{
 
 	public void setVo(PostagemVO vo) {
 		this.vo = vo;
+		if(vo.getHistorico() == null) {
+			vo.setHistorico(new ArrayList<HistoricoDePostagemVO>());
+		}
 	}
 
 	public void populePostagem(JSONObject postagem) {

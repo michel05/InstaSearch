@@ -11,21 +11,21 @@ import javax.ws.rs.core.Response;
 
 import com.google.gson.Gson;
 
-import br.com.mongoDB.PostagemRepository;
+import br.com.jpa.dao.PostagemDAO;
 import br.com.tcc.VO.PostagemVO;
 
 
 @Path("/posts")
 public class ServicoDePostagem {
 
-	private PostagemRepository repositorio;
+	private PostagemDAO repositorio;
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON) 
 	public Response busquePostagens() { 
 		
 		return Response.ok() //200
-				.entity(new Gson().toJson(repositorio().listarTodos()))
+				.entity(new Gson().toJson(repositorio().getLista()))
 				.header("Access-Control-Allow-Origin", "*")
 				.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
 				.build(); 
@@ -34,9 +34,9 @@ public class ServicoDePostagem {
 	@Path("{id}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON) 
-	public Response busquePostagemPorId(@PathParam("id") String id) {
+	public Response busquePostagemPorId(@PathParam("id") int id) {
 		return Response.ok() //200
-				.entity(new Gson().toJson(repositorio().buscarPorId(id)))
+				.entity(new Gson().toJson(repositorio().findById(id)))
 				.header("Access-Control-Allow-Origin", "*")
 				.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
 				.build(); 
@@ -47,7 +47,7 @@ public class ServicoDePostagem {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response adicionePostagem(PostagemVO postagemVO) {
 		try {
-			repositorio().salvar(postagemVO);
+			repositorio().inserir(postagemVO);
 			return Response.ok()
 					.header("Access-Control-Allow-Origin", "*")
 					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
@@ -61,7 +61,7 @@ public class ServicoDePostagem {
 		}
 	}
 	
-	private PostagemRepository repositorio() {
-		return repositorio != null ? repositorio : new PostagemRepository();
+	private PostagemDAO repositorio() {
+		return repositorio != null ? repositorio : new PostagemDAO();
 	}
 }

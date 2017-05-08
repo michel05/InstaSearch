@@ -14,7 +14,7 @@ import br.com.interfaces.IRepository;
 import br.com.tcc.VO.PostagemVO;
 
 
-public class PostagemRepository implements IRepository<PostagemVO, String>{
+public class PostagemRepository implements IRepository<PostagemVO, Integer>{
 
 	private MongoDBConection conexao;
 	private final String COLECAO = "Postagem";
@@ -24,7 +24,7 @@ public class PostagemRepository implements IRepository<PostagemVO, String>{
 	}
 	
 	public void salvar(PostagemVO dominio) {
-		if(!verifiqueRegistroExiste(dominio.getId())) {
+		if(!verifiqueRegistroExiste(dominio.getIdInstagram())) {
 			DBObject dbObject = (DBObject)JSON.parse(new Gson().toJson(dominio));
 			getTabela().insert(dbObject);
 		} else {
@@ -42,7 +42,16 @@ public class PostagemRepository implements IRepository<PostagemVO, String>{
 		return listaPostagem;
 	}
 
-	public PostagemVO buscarPorId(String id) {
+	public PostagemVO buscarPorIdInstagram(String id) {
+		DBObject searchQuery = new BasicDBObject().append("idInstagram", id);
+		DBCursor cursor = getTabela().find(searchQuery);
+		while(cursor.hasNext()) {
+			return (new Gson()).fromJson(cursor.next().toString(),PostagemVO.class);
+		}
+		return null;
+	}
+	
+	public PostagemVO buscarPorId(Integer id) {
 		DBObject searchQuery = new BasicDBObject().append("id", id);
 		DBCursor cursor = getTabela().find(searchQuery);
 		while(cursor.hasNext()) {

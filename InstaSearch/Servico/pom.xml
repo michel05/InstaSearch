@@ -9,6 +9,7 @@
   <packaging>war</packaging>
   
   
+  
   	<build>
 	    <plugins>
 	        <plugin>
@@ -63,8 +64,10 @@
 		<dependency>
 		    <groupId>com.sun.jersey</groupId>
 		    <artifactId>jersey-json</artifactId>
-		    <version>1.19.1</version>
+		    <version>1.8</version>
 		</dependency>
+		
+		
 		
 	</dependencies>
 </project>

@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,7 +17,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.google.gson.annotations.Expose;
 
 import br.com.tcc.Enums.StatusEnum;
 import br.com.tcc.Interfaces.IDominioPersistente;
@@ -29,35 +33,44 @@ public class PostagemVO implements IDominioPersistente<Integer> {
 	private static final long serialVersionUID = 5003228171033508600L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Expose
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 	
-	@Id
+	@Expose
 	@Column(name = "id_instagram")
 	private String idInstagram;
 
+	@Expose
 	@Column(length = 10485760)
 	private String descricao;
 
+	@Expose
 	@Column(name = "num_total_curtidas")
 	private int numTotalCurtidas;
 
+	@Expose
 	@Column(name = "num_total_comentarios")
 	private int numTotalComentarios;
 
+	@Expose
 	@Column(length = 10485760, name = "ur_limagem")
 	private String urlImagem;
 
+	@Expose
 	@Enumerated(EnumType.STRING)
 	private StatusEnum status = StatusEnum.ATIVO;
 	private String link;
 
+	@Expose
 	@Column(name = "data_criacao")
 	private Calendar dataCriacao;
 
+	@Expose
 	@Column(name = "data_inicio_monitoramento")
 	private Calendar dataInicioMonitoramento;
 
+	@Expose
 	@Column(name = "perio_dodia")
 	private String periodoDoDia;
 
@@ -65,18 +78,27 @@ public class PostagemVO implements IDominioPersistente<Integer> {
 	@JoinColumn(name = "id_monitoramento")
 	private MonitoramentoVO monitoramento;
 
-	@OneToMany(mappedBy = "postagem", cascade = { CascadeType.ALL })
+	@Expose
+	@OneToMany(mappedBy = "postagem", cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	private List<HistoricoDePostagemVO> historico;
-
+	
+	@Transient
 	@OneToMany(mappedBy = "postagem", cascade = { CascadeType.ALL })
 	private List<LabelAnaliseImageVO> listaAnaliseImageVO;
 
+	@Transient
 	@OneToOne(mappedBy = "postagem", cascade = { CascadeType.ALL })
 	private OCRAnaliseImageVO ocrAnaliseImageVO;
 
 	public PostagemVO() {
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		return this.idInstagram.equals(obj);
+	}
+	
 	public String getDescricao() {
 		return descricao;
 	}

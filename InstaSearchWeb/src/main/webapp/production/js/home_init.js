@@ -5,26 +5,27 @@ $(document).ready(function() {
 	$("#monit .loading-padrao").show();
 	
 	inicie_home();
-	intervalPostagens = setInterval(populePostagensAtuais, 30000);
+	
 
 });
 
 function inicie_home() {
-	
+
 	console.log(caminho_padrao + '/Servico/monitoramento/verifiqueMonitoramento');
 	$.get({
 		url: caminho_padrao + '/Servico/monitoramento/verifiqueMonitoramento',
 		success: function(data) {
-			if(data != null && data != '') {
+			if(data != null && data != "") {
 				continuar_monitoramento(data);
 				prepare_area_postagens(data);
+				intervalPostagens = setInterval(populePostagensAtuais, 30000);
 
 			} else {
 				$("#monit .loading-padrao").hide();
 				$(".area-botao").show();
 			}
 		}
-	});		
+	});	
 }
 
 function prepare_area_postagens(data) {
@@ -105,6 +106,8 @@ function populePostagensAtuais() {
 				prepare_area_postagens(data);
 			} else {
 				clearInterval(intervalPostagens);
+				console.log("Acabou");
+				$("#conteudo").load("home.html");
 			}
 		}
 	});	

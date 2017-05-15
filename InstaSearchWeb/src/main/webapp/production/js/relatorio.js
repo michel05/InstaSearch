@@ -19,8 +19,7 @@ function inicie_relatorio() {
 		  	};
 		      $(".loading-padrao").hide();
 		  }
-		});	
-	
+		});			
 }
 
 function montePainelMonitoramento(monitoramentoJson) {

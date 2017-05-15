@@ -41,6 +41,7 @@ public class Postagem{
 			vo.setLink(postagem.getString("link"));
 			
 			HistoricoDePostagemVO histPostagem = new  HistoricoDePostagemVO();
+			histPostagem.setPostagem(vo);
 			histPostagem.setDataInicial(Calendar.getInstance());
 			histPostagem.setNumComentarios(RequisicaoUtil.busqueObjetoJson(postagem,"comments").getInt("count"));
 			histPostagem.setNumCurtidas(RequisicaoUtil.busqueObjetoJson(postagem, "likes").getInt("count"));

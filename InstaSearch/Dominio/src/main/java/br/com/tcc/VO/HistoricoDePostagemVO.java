@@ -2,63 +2,68 @@ package br.com.tcc.VO;
 
 import java.util.Calendar;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.google.gson.annotations.Expose;
 
 import br.com.tcc.Interfaces.IDominioPersistente;
 
 @XmlRootElement(name = "historicoPostagem")
 @Entity
 @Table(name="historico_postagem")
-public class HistoricoDePostagemVO implements IDominioPersistente<String>{
+public class HistoricoDePostagemVO implements IDominioPersistente<Integer>{
 	
 	private static final long serialVersionUID = -2319495054564625636L;
 
 	@Id
-	@Basic(optional = false)
-    @Column(name = "id",unique=true, nullable = false)
-	private String id;
+	@Expose
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private Integer id;
 	
+	@Expose
 	@Column(name = "data_inicial")
 	private Calendar dataInicial;
 	
+	@Expose
 	@Column(name = "data_final")
 	private Calendar dataFinal;
 	
+	@Expose
 	@Column(name = "num_curtidas")
 	private int numCurtidas;
 	
+	@Expose
 	@Column(name = "num_comentarios")
 	private int numComentarios;
 	
+	@Expose
 	@Column(name = "num_curtidas_parcial")
 	private int numCurtidasParcial;
 	
+	@Expose
 	@Column(name = "num_comentarios_parcial")
 	private int numComentariosParcial;
 	
 	@ManyToOne
-	@JoinColumns({
-		  @JoinColumn(name = "idPostagem", insertable = false, updatable = false),
-		  @JoinColumn(name = "idHistoricoPostagem", insertable = false, updatable = false)
-		})
+	@JoinColumn(name = "id_postagem")
 	private PostagemVO postagem;
 
 	public HistoricoDePostagemVO() {
 	}
 	
-	public String getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

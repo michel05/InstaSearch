@@ -8,7 +8,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
-import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import br.com.jpa.contratos.BaseDao;
 import br.com.jpa.dao.MonitoramentoDAO;
@@ -17,7 +17,7 @@ import br.com.tcc.Enums.StatusEnum;
 import br.com.tcc.Relatorio.MonitoramentoRelatorio;
 import br.com.tcc.Threads.MonitoramentoThread;
 import br.com.tcc.VO.MonitoramentoVO;
-
+import br.com.tcc.configuracoes.Configuracoes;
 
 @Path("/monitoramento")
 public class ServicoDeMonitoramento {
@@ -45,28 +45,26 @@ public class ServicoDeMonitoramento {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON) 
 	public String busqueMonitoramentos() { 
-		return new Gson().toJson(repositorio().getLista());
+		return gerarGson(repositorio().getLista());
 	}
 	
 	@Path("{id}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON) 
 	public String busqueMonitoramentoPorId(@PathParam("id") int id) {
-		return new Gson().toJson(repositorio().findById(id));
+		return gerarGson(repositorio().findById(id));
 	}
 	
 	@Path("/iniciar/{titulo}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON) 
 	public String inicieMonitoramento(@PathParam("titulo") String titulo) throws InterruptedException {
-		
-//		if(monitoramentoThread == null || verifiqueMonitoramentoAtivo() == null) {
-			monitoramentoThread = new MonitoramentoThread(new Monitoramento(titulo));
+			monitoramentoThread = new MonitoramentoThread(new Monitoramento(titulo),
+										Configuracoes.tempoDeMonitoramento);
 			monitoramentoThread.start();
 			Thread.sleep(2000);
-//		}
 		
-		return new Gson().toJson(verifiqueMonitoramentoAtivo()); 
+		return gerarGson(verifiqueMonitoramentoAtivo()); 
 	}
 	
 	@Path("/cancelar")
@@ -78,11 +76,11 @@ public class ServicoDeMonitoramento {
 		if (monitoramentoThread != null) {
 			monitoramentoAtual = monitoramentoThread.getMonitoramento().getVO();
 			
-			monitoramentoThread.interrupt();
+			monitoramentoThread.setStatus(StatusEnum.INATIVO);
 			monitoramentoThread = null;
 		}
 		
-		return new Gson().toJson(monitoramentoAtual);
+		return gerarGson(monitoramentoAtual);
 	}
 	
 	@Path("/verifiqueMonitoramento")
@@ -90,17 +88,46 @@ public class ServicoDeMonitoramento {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String verifiqueMonitoramentoAtivo() {
 		
-		MonitoramentoVO monitoramentoAtual = null;
+ 		MonitoramentoVO monitoramentoAtual = null;
 		if (monitoramentoThread != null) {
-			monitoramentoAtual = monitoramentoThread.getMonitoramento().getVO();
-			monitoramentoAtual = (monitoramentoAtual.getStatus() == StatusEnum.INATIVO) ? null : monitoramentoAtual;
+			if(monitoramentoThread.isAlive()) {
+				monitoramentoAtual = monitoramentoThread.getMonitoramento().getVO();
+				monitoramentoAtual = (monitoramentoAtual.getStatus() == StatusEnum.INATIVO) ? null : monitoramentoAtual;
+			}
 		}
 		
-		return new Gson().toJson(monitoramentoAtual);
+		return gerarGson(monitoramentoAtual);
+	}
+	
+	@Path("/tempoMonitoramento")
+	@GET
+	@Produces(MediaType.TEXT_PLAIN) 
+	public String buscarTempoMonitoramento() {
+		long milissegundos = (Configuracoes.tempoDeMonitoramento);
+		int horas = (int) (milissegundos / 3600000);
+		int minutos = (int) ((milissegundos % 3600000) / 60000);
+		return "" + (horas < 10 ? "0" : "") + horas 
+				+ ":"
+				+ (minutos < 10 ? "0" : "") + minutos;
+	}
+	
+	@Path("/tempoMonitoramento/{tempo}")
+	@GET
+	@Produces({MediaType.TEXT_PLAIN})
+	public String tempoDeMonitoramento(@PathParam("tempo") long tempo) {
+		Configuracoes.tempoDeMonitoramento = tempo;
+		return buscarTempoMonitoramento();
 	}
 	
 	private BaseDao<MonitoramentoVO, Integer> repositorio() {
 		return repositorio != null ? repositorio : new MonitoramentoDAO();
+	}
+	
+	private String gerarGson(Object object) {
+		if(object == null) {
+			return null;
+		}
+		return new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(object);
 	}
 	
 }

@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,9 +17,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.google.gson.annotations.Expose;
+
 import br.com.tcc.Enums.StatusEnum;
 import br.com.tcc.Interfaces.IDominioPersistente;
-import br.com.tcc.Utils.GeradorDeCodigoAutomatico;
 
 @XmlRootElement(name = "monitoramento")
 @Entity
@@ -26,22 +28,29 @@ import br.com.tcc.Utils.GeradorDeCodigoAutomatico;
 public class MonitoramentoVO implements IDominioPersistente<Integer>, Comparable<Integer>{
 	
 	private static final long serialVersionUID = 5802080080211470068L;
-	@Id 
+	
+	@Id
+	@Expose
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 	
+	@Expose
 	private String titulo;
 	
+	@Expose
 	@Column(name = "data_inicio")
 	private long dataDeInicio;
 	
+	@Expose
 	@Column(name = "data_termino")
 	private long dataDeTermino;
 
+	@Expose
 	@Enumerated(EnumType.STRING)
 	private StatusEnum status;
 	
-	@OneToMany(mappedBy="monitoramento", cascade = {CascadeType.MERGE}, orphanRemoval=true)
+	@Expose
+	@OneToMany(mappedBy="monitoramento", cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	private List<PostagemVO> postagens;
 
 	public MonitoramentoVO() { }

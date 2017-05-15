@@ -38,11 +38,12 @@ public class Monitoramento {
 			for (int i=0; i < medias.length(); i++) {
 
 				PostagemVO post = new PostagemVO();
+				post.setMonitoramento(vo);
 				
 				JSONObject postagem =  RequisicaoUtil.busqueObjetoJsonDeUmArray(medias, i);
 				post.setIdInstagram(postagem.getString("id"));
 				
-				if(!vo.getPostagens().contains(post)) {
+				if(!vo.getPostagens().stream().anyMatch(x -> x.getIdInstagram().equals(postagem.getString("id")))) {
 					vo.getPostagens().add(post);
 					post.setDataInicioMonitoramento(Calendar.getInstance());
 					verifiqueQuantidadePostsAtivos();

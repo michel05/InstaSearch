@@ -12,11 +12,15 @@ public class MonitoramentoThread extends Thread {
 	private Monitoramento monitoramento;
 	private MonitoramentoDAO repositorio;
 	private PostagemDAO repoPostagem;
+	private StatusEnum status;
+	private long tempoDeMonitoramento;
 	
-	public MonitoramentoThread(Monitoramento monitoramento) {
+	public MonitoramentoThread(Monitoramento monitoramento, long tempoDeMonitoramento) {
 		this.monitoramento = monitoramento;
 		repositorio = new MonitoramentoDAO();
 		repoPostagem = new PostagemDAO();
+		status = StatusEnum.ATIVO;
+		this.tempoDeMonitoramento = tempoDeMonitoramento;
 	}
 	
 	public void run() {
@@ -34,13 +38,13 @@ public class MonitoramentoThread extends Thread {
 //			});
 			Thread.sleep(60 * 1000);
 			
-			while(!verifiqueSePassouTresHoras()) {
+			while(!verifiqueSePassouTempoMaximoMonitoramento() && verifiqueSeFoiCancelada()) {
 				monitoramento.realizaMonitoramento();
 				repositorio.atualizar(monitoramento.getVO());
-				monitoramento.getVO().getPostagens().forEach(x -> {
-					if(x.getStatus() == StatusEnum.ATIVO) 
-						repoPostagem.atualizar(x);	
-					});
+//				monitoramento.getVO().getPostagens().forEach(x -> {
+//					if(x.getStatus() == StatusEnum.ATIVO) 
+//						repoPostagem.atualizar(x);	
+//					});
 				
 				Thread.sleep(60 * 1000);
 			}
@@ -54,6 +58,10 @@ public class MonitoramentoThread extends Thread {
 	}
 
 	
+	private boolean verifiqueSeFoiCancelada() {
+		return getStatus().equals(StatusEnum.ATIVO);
+	}
+
 	@Override
 	public void interrupt() {
 		
@@ -63,12 +71,12 @@ public class MonitoramentoThread extends Thread {
 		super.interrupt();
 	}
 	
-	private boolean verifiqueSePassouTresHoras() {
-		//realizar monitoramento infinito
-		return false;
-		
-//		return (System.currentTimeMillis() - monitoramento.getVO().getDataDeInicio()) 
-//				>=  3600000 * 3; // 3 horas
+	private boolean verifiqueSePassouTempoMaximoMonitoramento() {
+		if(getTempoDeMonitoramento() == 0) {
+			return false;
+		}
+		return (System.currentTimeMillis() - monitoramento.getVO().getDataDeInicio()) 
+				>=  getTempoDeMonitoramento(); 
 //		return (System.currentTimeMillis() - monitoramento.getVO().getDataDeInicio()) 
 //				>=  (60 * 1000 * 10);
 	}
@@ -85,6 +93,22 @@ public class MonitoramentoThread extends Thread {
 	{
 		monitoramento.getVO().setDataDeTermino(Calendar.getInstance().getTimeInMillis());
 		monitoramento.getVO().setStatus(StatusEnum.INATIVO);
+	}
+
+	public StatusEnum getStatus() {
+		return status;
+	}
+
+	public void setStatus(StatusEnum status) {
+		this.status = status;
+	}
+
+	public long getTempoDeMonitoramento() {
+		return tempoDeMonitoramento;
+	}
+
+	public void setTempoDeMonitoramento(long tempoDeMonitoramento) {
+		this.tempoDeMonitoramento = tempoDeMonitoramento;
 	}
 	
 }

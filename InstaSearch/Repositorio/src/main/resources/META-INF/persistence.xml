@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+    version="2.1">
+    
+    <persistence-unit name="postgres" transaction-type="RESOURCE_LOCAL">
+    	<provider>org.hibernate.ejb.HibernatePersistence</provider>
+    	<class>br.com.tcc.VO.PostagemVO</class>
+    	<class>br.com.tcc.VO.MonitoramentoVO</class>
+    	<class>br.com.tcc.VO.CategoriaImagemVO</class>
+    	<class>br.com.tcc.VO.LabelAnaliseImageVO</class>
+    	<class>br.com.tcc.VO.HistoricoDePostagemVO</class>
+    	<class>br.com.tcc.VO.OCRAnaliseImageVO</class>
+    	<class>br.com.tcc.VO.FeaturesVO</class>
+    	<class>br.com.tcc.VO.FeaturesImagemVO</class>
+    	
+		<properties>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.show_sql" value="true" />
+			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
+			<property name="javax.persistence.jdbc.user" value="postgres" />
+			<property name="javax.persistence.jdbc.password" value="12345" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/instasearch" />
+			<property name="hibernate.temp.use_jdbc_metadata_defaults" value="false"/>
+		</properties>
+	</persistence-unit>
+</persistence>

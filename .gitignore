@@ -1,1 +1,8 @@
 /target/
+/InstaSearchWeb/target
+/InstaSearch/instasearch-clean-install.launch
+/InstaSearch/run_InstaSearch_tomcat.launch
+/InstaSearch/.settings
+/InstaSearch/target
+/InstaSearch/.classpath
+/InstaSearch/.project

@@ -50,7 +50,7 @@ public class MonitoramentoVO implements IDominioPersistente<Integer>, Comparable
 	private StatusEnum status;
 	
 	@Expose
-	@OneToMany(mappedBy="monitoramento", cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
+	@OneToMany(mappedBy="monitoramento", cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<PostagemVO> postagens;
 
 	public MonitoramentoVO() { }

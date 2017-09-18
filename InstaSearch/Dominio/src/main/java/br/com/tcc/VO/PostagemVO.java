@@ -60,6 +60,8 @@ public class PostagemVO implements IDominioPersistente<Integer> {
 	@Expose
 	@Enumerated(EnumType.STRING)
 	private StatusEnum status = StatusEnum.ATIVO;
+	
+	@Expose
 	private String link;
 
 	@Expose
@@ -217,6 +219,12 @@ public class PostagemVO implements IDominioPersistente<Integer> {
 
 	public void setIdInstagram(String idInstagram) {
 		this.idInstagram = idInstagram;
+	}
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "id: " + this.id + " \n";
 	}
 
 }

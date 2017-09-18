@@ -1496,7 +1496,7 @@ span.right {
 .dashboard_graph {
   background: #fff;
   padding: 7px 10px; 
-  min-height: 300px;}
+  min-height: 350px;}
 
 .dashboard_graph .col-md-9, .dashboard_graph .col-md-3 {
   padding: 0; }
